@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { axiosInstance } from "../lib/axios.lib";
 
 interface ITask {
+  _id: string;
   title: string;
   description: string;
   status: string;
@@ -15,7 +16,6 @@ export const GetAllTaskPage = () => {
     const handleGetAllTask = async () => {
       try {
         const response = await axiosInstance.get("/tasks/getAll");
-        console.log(response);
         setAllTasks(response.data.allTasks);
       } catch (error) {
         console.log(error);
@@ -32,10 +32,12 @@ export const GetAllTaskPage = () => {
         <h1>ALL Tasks</h1>
         {allTasks.map((task: ITask) => {
           return (
-            <div className="items-center border p-4 ">
-              <h1>{task.title}</h1>
-              <p>{task.description}</p>
-              <p>{task.dueDate}</p>
+            <div key={task._id} className="items-center border p-4 ">
+              <h1 className="m-2">Title: {task.title}</h1>
+              <p className="m-2">description: {task.description}</p>
+              <p className="m-2">
+                Duedate: {new Date(task.dueDate).toLocaleDateString()}
+              </p>
             </div>
           );
         })}

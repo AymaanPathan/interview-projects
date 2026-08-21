@@ -56,9 +56,22 @@ router.post("/add", async (req: Request, res: Response) => {
 
 // Get All Task Route
 
+// add search
 router.get("/getAll", async (req: Request, res: Response) => {
   try {
-    const allTasks = await Task.find();
+    const { search } = req.query;
+    let allTasks;
+
+    if (typeof search === "string") {
+      allTasks = await Task.find({
+        title: {
+          $regex: search,
+          $options: "i",
+        },
+      });
+    } else {
+      allTasks = await Task.find();
+    }
     if (allTasks.length === 0) {
       return res.status(400).json({
         message: "No Tasks Found",

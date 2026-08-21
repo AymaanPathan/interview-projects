@@ -2,8 +2,8 @@ import mongoose, { Schema, type Document } from "mongoose";
 import { TaskStatuses } from "../constant/task.constant.js";
 
 interface ITask extends Document {
-  title: String;
-  description?: String;
+  title: string;
+  description?: string;
   status: "pending" | "in-progress" | "completed";
   completedAt?: Date;
   dueDate?: Date;
