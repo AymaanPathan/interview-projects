@@ -64,10 +64,20 @@ router.get("/getAll", async (req: Request, res: Response) => {
 
     if (typeof search === "string" && search.trim() !== "") {
       allTasks = await Task.find({
-        title: {
-          $regex: search,
-          $options: "i",
-        },
+        $or: [
+          {
+            title: {
+              $regex: search,
+              $options: "i",
+            },
+          },
+          {
+            description: {
+              $regex: search,
+              $options: "i",
+            },
+          },
+        ],
       });
     } else {
       allTasks = await Task.find();

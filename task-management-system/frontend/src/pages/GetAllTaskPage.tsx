@@ -28,6 +28,15 @@ export const GetAllTaskPage = () => {
     }
   };
 
+  const getOneTask = async (id: string) => {
+    try {
+      const response = await axiosInstance.get(`/tasks/${id}`);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     handleGetAllTask();
   }, []);
@@ -55,7 +64,11 @@ export const GetAllTaskPage = () => {
         </div>
         {allTasks.map((task: ITask) => {
           return (
-            <div key={task._id} className="items-center border p-4 ">
+            <div
+              onClick={() => getOneTask(task._id)}
+              key={task._id}
+              className="items-center border p-4"
+            >
               <h1 className="m-2">Title: {task.title}</h1>
               <p className="m-2">description: {task.description}</p>
               <p className="m-2">
