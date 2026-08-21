@@ -6,6 +6,7 @@ const router = Router();
 
 console.log("Task Router LOADED");
 
+// Adding Task Route
 router.post("/add", async (req: Request, res: Response) => {
   try {
     const { title, description, status, dueDate } = req.body;
@@ -48,6 +49,29 @@ router.post("/add", async (req: Request, res: Response) => {
     console.log(err);
     res.status(500).json({
       message: "Failed to Create task",
+      error: err,
+    });
+  }
+});
+
+// Get All Task Route
+
+router.get("/getAll", async (req: Request, res: Response) => {
+  try {
+    const allTasks = await Task.find();
+    if (allTasks.length === 0) {
+      return res.status(400).json({
+        message: "No Tasks Found",
+      });
+    }
+    return res.status(200).json({
+      message: "Task Fetched SuccessFully",
+      allTasks,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "Failed To Fetch Tasks",
       error: err,
     });
   }
