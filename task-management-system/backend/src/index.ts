@@ -1,8 +1,12 @@
+import dotenv from "dotenv";
+dotenv.config();
 import express, { type Request, type Response } from "express";
+import { connectDb } from "./lib/db.lib.js";
 
 const app = express();
 
 app.use(express.json());
+connectDb();
 
 app.get("/", (req: Request, res: Response) => {
   res.json({
