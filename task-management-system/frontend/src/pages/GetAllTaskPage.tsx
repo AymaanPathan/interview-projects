@@ -5,7 +5,7 @@ interface ITask {
   title: string;
   description: string;
   status: string;
-  dueDate: Date;
+  dueDate: string;
 }
 
 export const GetAllTaskPage = () => {
@@ -24,14 +24,22 @@ export const GetAllTaskPage = () => {
     handleGetAllTask();
   }, []);
   return (
-    <div>
-      {allTasks.map((task: ITask, index) => {
-        return (
-          <div key={index}>
-            <h2>{task.title}</h2>
-          </div>
-        );
-      })}
+    <div className="flex min-h-screen items-center justify-center bg-gray-100 p-10">
+      <div
+        className="flex w-full max-w-lg  flex-col gap-4 rounded-lg bg-white p-6
+      shadow"
+      >
+        <h1>ALL Tasks</h1>
+        {allTasks.map((task: ITask) => {
+          return (
+            <div className="items-center border p-4 ">
+              <h1>{task.title}</h1>
+              <p>{task.description}</p>
+              <p>{task.dueDate}</p>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };

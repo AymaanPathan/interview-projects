@@ -4,7 +4,7 @@ import { axiosInstance } from "../lib/axios.lib";
 export const AddTaskPage = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState("pending");
   const [dueDate, setDueDate] = useState("");
 
   const handleAddTask = async (e: React.FormEvent) => {
