@@ -62,7 +62,7 @@ router.get("/getAll", async (req: Request, res: Response) => {
     const { search } = req.query;
     let allTasks;
 
-    if (typeof search === "string") {
+    if (typeof search === "string" && search.trim() !== "") {
       allTasks = await Task.find({
         title: {
           $regex: search,
@@ -73,8 +73,9 @@ router.get("/getAll", async (req: Request, res: Response) => {
       allTasks = await Task.find();
     }
     if (allTasks.length === 0) {
-      return res.status(400).json({
+      return res.status(200).json({
         message: "No Tasks Found",
+        allTasks: [],
       });
     }
     return res.status(200).json({
