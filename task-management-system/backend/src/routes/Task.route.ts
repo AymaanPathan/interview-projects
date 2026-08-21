@@ -91,4 +91,26 @@ router.get("/getAll", async (req: Request, res: Response) => {
   }
 });
 
+// Get Single
+router.get("/:id", async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const singleTask = await Task.findById(id);
+    if (!singleTask) {
+      return res.status(400).json({
+        message: "Task Not Found",
+      });
+    }
+    return res.status(200).json({
+      message: "Task Got",
+      singleTask,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: "Failed to Load Tasks",
+      error: err,
+    });
+  }
+});
+
 export default router;
