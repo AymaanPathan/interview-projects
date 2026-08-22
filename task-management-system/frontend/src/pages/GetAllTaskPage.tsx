@@ -10,6 +10,8 @@ interface ITask {
   dueDate: string;
 }
 
+const statuses = ["pending", "in-Progress", "completed"];
+
 export const GetAllTaskPage = () => {
   const [allTasks, setAllTasks] = useState([]);
   const [search, setSearch] = useState("");
@@ -55,7 +57,6 @@ export const GetAllTaskPage = () => {
     }
   };
 
-
   const updateTaskDescription = async (id: string) => {
     try {
       await axiosInstance.patch(`/tasks/edit/${id}`, {
@@ -69,9 +70,23 @@ export const GetAllTaskPage = () => {
     }
   };
 
+  const updateTaskStatus = async (id: string, status: string) => {
+    try {
+      await axiosInstance.patch(`/tasks/edit/${id}`, {
+        status,
+      });
+
+      await handleGetAllTask();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     handleGetAllTask();
   }, []);
+
+  console.log(status);
 
   return (
     <div className="flex min-h-screen  items-center justify-center bg-gray-100 p-10">
@@ -156,7 +171,6 @@ export const GetAllTaskPage = () => {
                       onClick={(e) => {
                         e.stopPropagation();
                         updateTaskDescription(task._id);
-                        
                       }}
                       className="p-2 cursor-pointer active:scale-95 text-white bg-red-500"
                     >
@@ -182,6 +196,21 @@ export const GetAllTaskPage = () => {
               <p className="m-2">
                 Duedate: {new Date(task.dueDate).toLocaleDateString()}
               </p>
+              <select
+                value={task.status}
+                onChange={(e) => {
+                  e.stopPropagation();
+                  updateTaskStatus(task._id, e.target.value);
+                }}
+              >
+                {statuses.map((status) => {
+                  return (
+                    <option key={status} value={status}>
+                      {status}
+                    </option>
+                  );
+                })}
+              </select>
             </div>
           );
         })}
