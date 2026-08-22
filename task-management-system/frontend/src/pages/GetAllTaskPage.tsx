@@ -13,6 +13,8 @@ interface ITask {
 export const GetAllTaskPage = () => {
   const [allTasks, setAllTasks] = useState([]);
   const [search, setSearch] = useState("");
+  const [title, setTitle] = useState("");
+  const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
 
   const handleGetAllTask = async () => {
     try {
@@ -69,7 +71,45 @@ export const GetAllTaskPage = () => {
               key={task._id}
               className="items-center border p-4"
             >
-              <h1 className="m-2">Title: {task.title}</h1>
+              <div className="flex items-center gap-3">
+                {editingTaskId === task._id ? (
+                  <input
+                    className="border p-2"
+                    type="text"
+                    onChange={(e) => setTitle(e.target.value)}
+                    value={title}
+                  />
+                ) : (
+                  <h1 className="m-2">Title: {task.title}</h1>
+                )}
+
+                {editingTaskId === task._id && (
+                  <button
+                    onClick={() => {
+                      setEditingTaskId(task._id);
+                      setTitle(task.title);
+                    }}
+                    className="p-1 cursor-pointer text-white bg-red-600 active:scale-95"
+                  >
+                    Done
+                  </button>
+                )}
+
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (editingTaskId === task._id) {
+                      setEditingTaskId(null);
+                    } else {
+                      setEditingTaskId(task._id);
+                      setTitle(task.title);
+                    }
+                  }}
+                  className="p-1 cursor-pointer text-white bg-blue-600 active:scale-95"
+                >
+                  Edit Title
+                </button>
+              </div>
               <p className="m-2">description: {task.description}</p>
               <p className="m-2">
                 Duedate: {new Date(task.dueDate).toLocaleDateString()}
