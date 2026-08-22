@@ -39,6 +39,18 @@ export const GetAllTaskPage = () => {
     }
   };
 
+  const updateTaskDetails = async (id: string) => {
+    try {
+      await axiosInstance.patch(`/tasks/edit/${id}`, {
+        title,
+      });
+      await handleGetAllTask();
+        setEditingTaskId(null);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     handleGetAllTask();
   }, []);
@@ -85,9 +97,9 @@ export const GetAllTaskPage = () => {
 
                 {editingTaskId === task._id && (
                   <button
-                    onClick={() => {
-                      setEditingTaskId(task._id);
-                      setTitle(task.title);
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      updateTaskDetails(task._id);
                     }}
                     className="p-1 cursor-pointer text-white bg-red-600 active:scale-95"
                   >
