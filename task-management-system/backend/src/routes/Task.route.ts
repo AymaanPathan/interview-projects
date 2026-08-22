@@ -101,6 +101,31 @@ router.get("/getAll", async (req: Request, res: Response) => {
   }
 });
 
+// Edit Task Title or Description or status
+router.patch("/edit/:id", async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const updatedTask = await Task.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+
+    if (!updatedTask) {
+      return res.status(404).json({
+        message: "Task Not Found",
+      });
+    }
+    res.status(200).json({
+      message: "Task Updated Successfully",
+      updatedTask,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to Edit Task",
+      error,
+    });
+  }
+});
+
 // Get Single
 router.get("/:id", async (req: Request, res: Response) => {
   try {
