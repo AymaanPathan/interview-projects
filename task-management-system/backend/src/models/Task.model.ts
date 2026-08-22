@@ -21,7 +21,10 @@ const taskSchema = new Schema<ITask>(
     },
     status: {
       type: String,
-      enum: TaskStatuses,
+      enum: {
+        values: TaskStatuses,
+        message: "{VALUE} is not a valid task status",
+      },
     },
     completedAt: {
       type: Date,

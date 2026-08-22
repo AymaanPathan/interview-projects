@@ -107,6 +107,7 @@ router.patch("/edit/:id", async (req: Request, res: Response) => {
     const { id } = req.params;
     const updatedTask = await Task.findByIdAndUpdate(id, req.body, {
       new: true,
+      runValidators: true,
     });
 
     if (!updatedTask) {
