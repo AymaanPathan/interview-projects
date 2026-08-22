@@ -15,6 +15,10 @@ export const GetAllTaskPage = () => {
   const [search, setSearch] = useState("");
   const [title, setTitle] = useState("");
   const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
+  const [description, setDescription] = useState("");
+  const [editingTaskIdDesc, setEditingTaskIdDesc] = useState<string | null>(
+    null,
+  );
 
   const handleGetAllTask = async () => {
     try {
@@ -39,13 +43,27 @@ export const GetAllTaskPage = () => {
     }
   };
 
-  const updateTaskDetails = async (id: string) => {
+  const updateTaskTitle = async (id: string) => {
     try {
       await axiosInstance.patch(`/tasks/edit/${id}`, {
         title,
       });
       await handleGetAllTask();
-        setEditingTaskId(null);
+      setEditingTaskId(null);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
+  const updateTaskDescription = async (id: string) => {
+    try {
+      await axiosInstance.patch(`/tasks/edit/${id}`, {
+        description,
+      });
+
+      await handleGetAllTask();
+      setEditingTaskIdDesc(null);
     } catch (error) {
       console.log(error);
     }
@@ -56,9 +74,9 @@ export const GetAllTaskPage = () => {
   }, []);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100 p-10">
+    <div className="flex min-h-screen  items-center justify-center bg-gray-100 p-10">
       <div
-        className="flex w-full max-w-lg  flex-col gap-4 rounded-lg bg-white p-6
+        className="flex w-[1200px]  flex-col gap-4 rounded-lg bg-white p-6
       shadow"
       >
         <div className="flex items-center gap-7">
@@ -81,7 +99,7 @@ export const GetAllTaskPage = () => {
             <div
               onClick={() => getOneTask(task._id)}
               key={task._id}
-              className="items-center border p-4"
+              className="items-center w-full border p-4"
             >
               <div className="flex items-center gap-3">
                 {editingTaskId === task._id ? (
@@ -99,7 +117,7 @@ export const GetAllTaskPage = () => {
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      updateTaskDetails(task._id);
+                      updateTaskTitle(task._id);
                     }}
                     className="p-1 cursor-pointer text-white bg-red-600 active:scale-95"
                   >
@@ -122,7 +140,45 @@ export const GetAllTaskPage = () => {
                   Edit Title
                 </button>
               </div>
-              <p className="m-2">description: {task.description}</p>
+              <div className="flex items-center gap-4">
+                {editingTaskIdDesc === task._id ? (
+                  <textarea
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    className="border "
+                  />
+                ) : (
+                  <p className="m-2">description: {task.description}</p>
+                )}
+                <div className="flex items-center gap-12">
+                  {editingTaskIdDesc === task._id && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        updateTaskDescription(task._id);
+                        
+                      }}
+                      className="p-2 cursor-pointer active:scale-95 text-white bg-red-500"
+                    >
+                      Done
+                    </button>
+                  )}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (editingTaskIdDesc === task._id) {
+                        setEditingTaskIdDesc(null);
+                      } else {
+                        setEditingTaskIdDesc(task._id);
+                        setDescription(task.description);
+                      }
+                    }}
+                    className="p-1 text-nowrap cursor-pointer text-white bg-blue-600 active:scale-95"
+                  >
+                    Edit Description
+                  </button>
+                </div>
+              </div>
               <p className="m-2">
                 Duedate: {new Date(task.dueDate).toLocaleDateString()}
               </p>
